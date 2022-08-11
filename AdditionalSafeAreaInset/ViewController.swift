@@ -35,10 +35,12 @@ class ViewController: UIPageViewController {
         self.setViewControllers(firstVC.flatMap{[$0]}, direction: .forward, animated: false)
         
         self.view.addSubview(visualEffectView)
-        visualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        visualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        visualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        visualEffectView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        NSLayoutConstraint.activate([
+            visualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            visualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            visualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            visualEffectView.heightAnchor.constraint(equalToConstant: 100)
+        ])
     }
     
     override func viewWillLayoutSubviews() {

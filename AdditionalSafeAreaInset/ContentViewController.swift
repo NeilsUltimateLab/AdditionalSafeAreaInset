@@ -37,10 +37,12 @@ class ContentViewController: UIViewController {
     
     private func configureViews() {
         self.view.addSubview(barContainer)
-        barContainer.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        barContainer.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        barContainer.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
-        barContainer.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        NSLayoutConstraint.activate([
+            barContainer.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            barContainer.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            barContainer.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            barContainer.heightAnchor.constraint(equalToConstant: 44)
+        ])
     }
     
 }
