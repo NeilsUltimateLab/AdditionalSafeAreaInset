@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIPageViewController {
     
+    var shouldAttachVisualEffectView: Bool = true
+    
     private var contents: [ContentViewController] = {
         (0...5).map {
             ContentViewController(index: $0)
@@ -35,12 +37,26 @@ class ViewController: UIPageViewController {
         self.setViewControllers(firstVC.flatMap{[$0]}, direction: .forward, animated: false)
         
         self.view.addSubview(visualEffectView)
-        NSLayoutConstraint.activate([
-            visualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            visualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            visualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            visualEffectView.heightAnchor.constraint(equalToConstant: 100)
-        ])
+        
+        if shouldAttachVisualEffectView {
+            NSLayoutConstraint.activate([
+                visualEffectView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                visualEffectView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                visualEffectView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+                visualEffectView.heightAnchor.constraint(equalToConstant: 100)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                visualEffectView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                visualEffectView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                visualEffectView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+                visualEffectView.heightAnchor.constraint(equalToConstant: 54)
+            ])
+            
+            visualEffectView.layer.cornerRadius = 12
+            visualEffectView.layer.cornerCurve = .continuous
+            visualEffectView.layer.masksToBounds = true
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -55,7 +71,11 @@ class ViewController: UIPageViewController {
         if self.view.traitCollection.horizontalSizeClass == .regular {
             safeAreaInsetBotton = 0
         }
-        viewController?.additionalSafeAreaInsets.bottom = self.visualEffectView.frame.height - safeAreaInsetBotton
+        if shouldAttachVisualEffectView {
+            viewController?.additionalSafeAreaInsets.bottom = self.visualEffectView.frame.height - safeAreaInsetBotton
+        } else {
+            viewController?.additionalSafeAreaInsets.bottom = self.view.frame.height - self.visualEffectView.frame.origin.y - safeAreaInsetBotton
+        }
     }
 }
 
