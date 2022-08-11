@@ -45,14 +45,17 @@ class ViewController: UIPageViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        
         // Incase PageViewController's first view controller is assigned after viewDidLoad.
         self.view.bringSubviewToFront(visualEffectView)
+        self.viewControllers?.forEach({configureSafeAreaInset(for: $0)})
     }
     
     func configureSafeAreaInset(for viewController: UIViewController?) {
-        // This patch is applied since we are setting the first view controller inside viewDidLoad in which we will not have fully resolved frame for either visualEffectView or safeAreaInsets for viewController's view.
-        viewController?.additionalSafeAreaInsets.bottom = max(100, self.visualEffectView.frame.height) - max(34, self.view.safeAreaInsets.bottom)
+        var safeAreaInsetBotton = self.view.safeAreaInsets.bottom
+        if self.view.traitCollection.horizontalSizeClass == .regular {
+            safeAreaInsetBotton = 0
+        }
+        viewController?.additionalSafeAreaInsets.bottom = self.visualEffectView.frame.height - safeAreaInsetBotton
     }
 }
 
